@@ -71,16 +71,10 @@ const Typeahead = ({ suggestions }) => {
 
       suggestionsListComponent = (
         <ul className="suggestions">
-          {filteredSuggestions.map((suggestion, index) => {
-            let className;
-
-            // Add active suggestion class
-            if (index === activeSuggestion) {
-              className = 'suggestion-active';
-            }
+          {filteredSuggestions.map((suggestion) => {
 
             return (
-              <li className={className} key={suggestion} onClick={onClick}>
+              <li key={suggestion} onClick={onClick}>
                 {suggestion}
               </li>
             );
