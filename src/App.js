@@ -6,18 +6,18 @@ import {optionItems} from './optionItems'
 
 function App() {
   return (
-    <div className={'container'}>
+    <main className={'container'}>
 
       <img src={logo} alt="Sesame logo"/>
 
       <h1>Sesame react typeahead</h1>
-      <h2>Type into the input and receive suggestions</h2>
+      <h2>Type and receive suggestions</h2>
 
       <Typeahead
         suggestions={optionItems}
       />
 
-    </div>
+    </main>
   );
 }
 
