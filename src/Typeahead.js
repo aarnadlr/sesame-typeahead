@@ -1,40 +1,50 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 const Typeahead = ({ suggestions }) => {
-
   const inputEl = useRef(null);
 
   const [activeSuggestion, setActiveSuggestion] = useState(0);
+
+  // array of desirable suggestions based on user input
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [userInput, setUserInput] = useState('');
 
-  useEffect(()=>{
+  // focus input on mount
+  useEffect(() => {
     inputEl.current.focus();
-  },[]);
-  // When the input value is changed
-  const onChange = e => {
-    const userInput = e.currentTarget.value;
+  }, []);
 
-    // Filter suggestions that don't contain the user's input
-    const filteredSuggestions = suggestions.filter(
+  const onChange = e => {
+    const userInput = e.target.value;
+
+    // Array of suggestions that do contain the user's input
+    const _filteredSuggestions = suggestions.filter(
+      //for each item,
       suggestion =>
+        // check if the user-typed item is in the array. If it is, add it to the array
         suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
 
+    // Set highlight to first item in list
+    setActiveSuggestion(0);
+
     // Update the filtered suggestions
-    setFilteredSuggestions(filteredSuggestions);
+    setFilteredSuggestions(_filteredSuggestions);
+
     // Show the suggestions
     setShowSuggestions(true);
+
     // Update the user input
-    setUserInput(e.currentTarget.value);
+    setUserInput(e.target.value);
   };
 
   // Event fired when the user clicks on a suggestion
   const onClick = e => {
     // reset
+    setActiveSuggestion(0);
     setFilteredSuggestions([]);
-    // reset
     setShowSuggestions(false);
     // Update the user input
     setUserInput(e.currentTarget.innerText);
@@ -42,28 +52,37 @@ const Typeahead = ({ suggestions }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    // clear the suggestions array
+    setFilteredSuggestions([]);
+
+    // Populate the input with the suggestion they selected
+    setUserInput(filteredSuggestions[activeSuggestion]);
+
+    // If there are no suggestions available, the user has typed in their own entry.
+    // Set the input to what they typed
+    if (filteredSuggestions[activeSuggestion] === undefined) {
+      setUserInput(e.target.value);
+    }
+    // close the suggestions
+    setShowSuggestions(false);
   };
 
-  // When the user presses a key down
+  // When the user presses a key
   const onKeyDown = e => {
-    // If user pressed the enter key:
+    // If user pressed the enter key
     if (e.keyCode === 13) {
-      e.preventDefault();
-      setFilteredSuggestions([]);
-      // close the suggestions
-      setShowSuggestions(false);
-      // update the input
-      setUserInput(filteredSuggestions[activeSuggestion]);
+      handleSubmit(e);
     }
 
     // If user pressed the up arrow, decrement the index
-    else if (e.keyCode === 38) {
+    if (e.keyCode === 38) {
       if (activeSuggestion === 0) {
         return;
       }
-
       setActiveSuggestion(activeSuggestion - 1);
     }
+
     // If user pressed the down arrow, increment the index
     else if (e.keyCode === 40) {
       if (activeSuggestion - 1 === filteredSuggestions.length) {
@@ -83,7 +102,7 @@ const Typeahead = ({ suggestions }) => {
           {filteredSuggestions.map((suggestion, index) => {
             let className;
 
-            // Flag the active suggestion with a class
+            // Mark the active suggestion with a class
             if (index === activeSuggestion) {
               className = 'suggestion-active';
             }
@@ -127,7 +146,7 @@ const Typeahead = ({ suggestions }) => {
       {suggestionsListComponent}
 
       {userInput && (
-        <p className="selection-label">You have selected: {userInput}</p>
+        <p className="selection-label">You have selected: <strong>{userInput}</strong></p>
       )}
     </>
   );
