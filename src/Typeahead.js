@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const Typeahead = ({ suggestions }) => {
+
+  const inputEl = useRef(null);
+
   const [activeSuggestion, setActiveSuggestion] = useState(0);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [userInput, setUserInput] = useState('');
-  // const [didSubmit, setDidSubmit] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
 
+  useEffect(()=>{
+    inputEl.current.focus();
+  },[]);
   // When the input value is changed
   const onChange = e => {
     const userInput = e.currentTarget.value;
@@ -37,18 +43,19 @@ const Typeahead = ({ suggestions }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // setDidSubmit(true);
   };
 
   // When the user presses a key down
   const onKeyDown = e => {
     // If user pressed the enter key:
     if (e.keyCode === 13) {
+      e.preventDefault();
       setFilteredSuggestions([]);
       // close the suggestions
       setShowSuggestions(false);
       // update the input
-      // setUserInput(filteredSuggestions[activeSuggestion]);
+      setUserInput(filteredSuggestions[activeSuggestion]);
+      setDidSubmit(true)
     }
 
     // If user pressed the up arrow, decrement the index
@@ -110,6 +117,7 @@ const Typeahead = ({ suggestions }) => {
       <form onSubmit={handleSubmit}>
         <label htmlFor="options">options</label>
         <input
+          ref={inputEl}
           id="options"
           type="text"
           onChange={onChange}
