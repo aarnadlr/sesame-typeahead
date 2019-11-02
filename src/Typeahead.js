@@ -8,7 +8,6 @@ const Typeahead = ({ suggestions }) => {
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [userInput, setUserInput] = useState('');
-  const [didSubmit, setDidSubmit] = useState(false);
 
   useEffect(()=>{
     inputEl.current.focus();
@@ -55,7 +54,6 @@ const Typeahead = ({ suggestions }) => {
       setShowSuggestions(false);
       // update the input
       setUserInput(filteredSuggestions[activeSuggestion]);
-      setDidSubmit(true)
     }
 
     // If user pressed the up arrow, decrement the index
