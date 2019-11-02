@@ -9,6 +9,7 @@ const Typeahead = ({ suggestions }) => {
   // array of desirable suggestions based on user input
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
 
+  // show the list of suggestions
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [userInput, setUserInput] = useState('');
 
@@ -78,9 +79,11 @@ const Typeahead = ({ suggestions }) => {
 
     // If user pressed the up arrow, decrement the index
     if (e.keyCode === 38) {
+      // if user is already at the top, do nothing
       if (activeSuggestion === 0) {
         return;
       }
+      // move up the list
       setActiveSuggestion(activeSuggestion - 1);
     }
 
@@ -89,21 +92,25 @@ const Typeahead = ({ suggestions }) => {
       if (activeSuggestion - 1 === filteredSuggestions.length) {
         return;
       }
-
+      // move down the list
       setActiveSuggestion(activeSuggestion + 1);
     }
   };
 
   let suggestionsListComponent;
 
+  // If the suggestions are being shown, and the user has entered text
   if (showSuggestions && userInput) {
+    // and if there are suggestions available
     if (filteredSuggestions.length) {
+
+      // display the suggestions
       suggestionsListComponent = (
         <ul className="suggestions">
           {filteredSuggestions.map((suggestion, index) => {
             let className;
 
-            // Mark the active suggestion with a class
+            // Add a class to the suggestion the user is on, to style (highlight) it
             if (index === activeSuggestion) {
               className = 'suggestion-active';
             }
@@ -117,6 +124,7 @@ const Typeahead = ({ suggestions }) => {
         </ul>
       );
     } else {
+      // if there are no suggestions available
       suggestionsListComponent = (
         <section className="no-suggestions">
           <p>
