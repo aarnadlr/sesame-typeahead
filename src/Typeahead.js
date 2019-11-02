@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const Typeahead = ({ suggestions }) => {
   const inputEl = useRef(null);
@@ -150,6 +151,10 @@ const Typeahead = ({ suggestions }) => {
       )}
     </>
   );
+};
+
+Typeahead.propTypes = {
+  suggestions: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default Typeahead;
